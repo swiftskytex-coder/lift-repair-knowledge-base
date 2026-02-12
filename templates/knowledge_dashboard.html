@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>База знаний - Ремонт лифтов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .card h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .article-list {
+            list-style: none;
+        }
+        
+        .article-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .article-item:last-child {
+            border-bottom: none;
+        }
+        
+        .article-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .article-meta {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .badge-category {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .badge-equipment {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .badge-manufacturer {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        .integration-status {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .status-online {
+            background: #4caf50;
+        }
+        
+        .status-offline {
+            background: #f44336;
+        }
+        
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .quick-link {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        .quick-link:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .quick-link-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>📚 База знаний - Ремонт и обслуживание лифтов</h1>
+        <nav class="nav">
+            <a href="/">🏠 Главная</a>
+            <a href="/articles">📄 Статьи</a>
+            <a href="/objects">🏢 Объекты</a>
+            <a href="/search">🔍 Поиск</a>
+            <a href="http://localhost:8081" target="_blank">🎫 Заявки</a>
+            <a href="http://localhost:8080" target="_blank">📦 Склад</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <!-- Статистика -->
+        <div class="stats-grid" id="stats-container">
+            <div class="stat-card">
+                <h3>Всего статей</h3>
+                <div class="stat-value" id="stat-articles">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Объектов</h3>
+                <div class="stat-value" id="stat-objects">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Типовых неисправностей</h3>
+                <div class="stat-value" id="stat-issues">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Записей обслуживания</h3>
+                <div class="stat-value" id="stat-maintenance">-</div>
+            </div>
+        </div>
+        
+        <!-- Поиск -->
+        <div class="card">
+            <h2>🔍 Быстрый поиск решений</h2>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Опишите проблему или введите ключевые слова...">
+                <button class="btn" onclick="searchKnowledge()">Найти</button>
+            </div>
+            <div id="search-results"></div>
+        </div>
+        
+        <!-- Быстрые ссылки -->
+        <div class="card">
+            <h2>⚡ Быстрый доступ</h2>
+            <div class="quick-links">
+                <a href="/articles" class="quick-link">
+                    <span class="quick-link-icon">📚</span>
+                    <div>
+                        <strong>База знаний</strong>
+                        <div style="font-size: 12px; color: #666;">Статьи и инструкции</div>
+                    </div>
+                </a>
+                <a href="/objects" class="quick-link">
+                    <span class="quick-link-icon">🏢</span>
+                    <div>
+                        <strong>Объекты</strong>
+                        <div style="font-size: 12px; color: #666;">История обслуживания</div>
+                    </div>
+                </a>
+                <a href="http://localhost:8081" target="_blank" class="quick-link">
+                    <span class="quick-link-icon">🎫</span>
+                    <div>
+                        <strong>Заявки</strong>
+                        <div style="font-size: 12px; color: #666;">Система заявок (порт 8081)</div>
+                    </div>
+                </a>
+                <a href="http://localhost:8080" target="_blank" class="quick-link">
+                    <span class="quick-link-icon">📦</span>
+                    <div>
+                        <strong>Склад</strong>
+                        <div style="font-size: 12px; color: #666;">Управление запчастями (порт 8080)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Статус интеграции -->
+        <div class="card">
+            <h2>🔗 Статус интеграции</h2>
+            <div class="integration-status">
+                <div class="status-item">
+                    <div class="status-dot status-online"></div>
+                    <span>База знаний (8082)</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot" id="status-tickets"></div>
+                    <span>Система заявок (8081)</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot" id="status-warehouse"></div>
+                    <span>Склад (8080)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Последние статьи -->
+        <div class="card">
+            <h2>📄 Последние статьи</h2>
+            <div id="recent-articles" class="loading">Загрузка...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Загрузка статистики
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/statistics');
+                const data = await response.json();
+                
+                document.getElementById('stat-articles').textContent = data.total_articles;
+                document.getElementById('stat-objects').textContent = data.total_objects;
+                document.getElementById('stat-issues').textContent = data.total_common_issues;
+                document.getElementById('stat-maintenance').textContent = data.total_maintenance_records;
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+        
+        // Проверка статуса систем
+        async function checkIntegrationStatus() {
+            try {
+                const response = await fetch('/api/integration/statistics');
+                const data = await response.json();
+                
+                // Система заявок
+                const ticketsStatus = document.getElementById('status-tickets');
+                if (data.tickets && data.tickets.status === 'online') {
+                    ticketsStatus.classList.add('status-online');
+                } else {
+                    ticketsStatus.classList.add('status-offline');
+                }
+                
+                // Склад
+                const warehouseStatus = document.getElementById('status-warehouse');
+                if (data.warehouse && data.warehouse.success) {
+                    warehouseStatus.classList.add('status-online');
+                } else {
+                    warehouseStatus.classList.add('status-offline');
+                }
+                
+                // Добавляем информацию о количестве
+                if (data.tickets && data.tickets.total_tickets !== undefined) {
+                    document.querySelector('#status-tickets + span').textContent = 
+                        `Система заявок (8081) - ${data.tickets.total_tickets} заявок`;
+                }
+                if (data.warehouse && data.warehouse.total_products !== undefined) {
+                    document.querySelector('#status-warehouse + span').textContent = 
+                        `Склад (8080) - ${data.warehouse.total_products} товаров`;
+                }
+            } catch (error) {
+                console.error('Error checking integration status:', error);
+                document.getElementById('status-tickets').classList.add('status-offline');
+                document.getElementById('status-warehouse').classList.add('status-offline');
+            }
+        }
+        
+        // Загрузка последних статей
+        async function loadRecentArticles() {
+            try {
+                const response = await fetch('/api/kb/articles?limit=5');
+                const data = await response.json();
+                
+                const container = document.getElementById('recent-articles');
+                
+                if (data.articles.length === 0) {
+                    container.innerHTML = '<p style="color: #666;">Пока нет статей</p>';
+                    return;
+                }
+                
+                let html = '<ul class="article-list">';
+                data.articles.forEach(article => {
+                    html += `
+                        <li class="article-item">
+                            <div class="article-title">${article.title}</div>
+                            <div class="article-meta">
+                                <span class="badge badge-category">${article.category}</span>
+                                ${article.equipment_type ? `<span class="badge badge-equipment">${article.equipment_type}</span>` : ''}
+                                ${article.manufacturer ? `<span class="badge badge-manufacturer">${article.manufacturer}</span>` : ''}
+                                <span style="margin-left: 10px; color: #999;">
+                                    👁 ${article.views_count} просмотров
+                                </span>
+                            </div>
+                        </li>
+                    `;
+                });
+                html += '</ul>';
+                
+                container.innerHTML = html;
+            } catch (error) {
+                document.getElementById('recent-articles').innerHTML = 
+                    '<div class="error">Ошибка загрузки статей</div>';
+            }
+        }
+        
+        // Поиск по базе знаний
+        async function searchKnowledge() {
+            const query = document.getElementById('search-input').value.trim();
+            if (!query) return;
+            
+            const container = document.getElementById('search-results');
+            container.innerHTML = '<div class="loading">Поиск...</div>';
+            
+            try {
+                const response = await fetch('/api/kb/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query, limit: 5 })
+                });
+                
+                const data = await response.json();
+                
+                if (data.results.length === 0) {
+                    container.innerHTML = '<p style="color: #666; margin-top: 15px;">Ничего не найдено</p>';
+                    return;
+                }
+                
+                let html = `<p style="margin: 15px 0; color: #666;">Найдено результатов: ${data.results.length}</p>`;
+                html += '<ul class="article-list">';
+                data.results.forEach(article => {
+                    html += `
+                        <li class="article-item">
+                            <div class="article-title">${article.title}</div>
+                            <div style="margin-top: 5px; color: #555;">
+                                ${article.content.substring(0, 150)}...
+                            </div>
+                            <div class="article-meta" style="margin-top: 5px;">
+                                <span class="badge badge-category">${article.category}</span>
+                                ${article.relevance_score ? `<span style="color: #4caf50;">Релевантность: ${Math.round(article.relevance_score * 100)}%</span>` : ''}
+                            </div>
+                        </li>
+                    `;
+                });
+                html += '</ul>';
+                
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = '<div class="error">Ошибка поиска</div>';
+            }
+        }
+        
+        // Обработка Enter в поле поиска
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchKnowledge();
+            }
+        });
+        
+        // Загрузка данных при старте
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+            checkIntegrationStatus();
+            loadRecentArticles();
+        });
+    </script>
+</body>
+</html>
