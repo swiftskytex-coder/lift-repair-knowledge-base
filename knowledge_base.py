@@ -29,8 +29,19 @@ def dashboard():
 
 @app.route('/articles')
 def articles_page():
-    """Страница статей"""
-    return render_template('knowledge_dashboard.html')
+    """Страница всех статей с пагинацией"""
+    page = request.args.get('page', 1, type=int)
+    per_page = 20
+    
+    articles = kb_db.get_all_knowledge_articles(limit=per_page, offset=(page-1)*per_page)
+    total = kb_db.get_knowledge_articles_count()
+    total_pages = (total + per_page - 1) // per_page
+    
+    return render_template('articles.html', 
+                         articles=articles, 
+                         page=page, 
+                         total_pages=total_pages,
+                         total=total)
 
 
 @app.route('/article/<int:article_id>')

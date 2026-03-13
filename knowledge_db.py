@@ -214,6 +214,33 @@ class KnowledgeBaseDB:
         
         return [self._row_to_dict(row) for row in rows]
     
+    def get_all_knowledge_articles(self, limit: int = 20, offset: int = 0) -> List[Dict]:
+        """Получение всех статей с пагинацией"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT * FROM knowledge_articles 
+            ORDER BY created_at DESC 
+            LIMIT ? OFFSET ?
+        ''', (limit, offset))
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [self._row_to_dict(row) for row in rows]
+    
+    def get_knowledge_articles_count(self) -> int:
+        """Получение общего количества статей"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT COUNT(*) FROM knowledge_articles')
+        count = cursor.fetchone()[0]
+        conn.close()
+        
+        return count
+    
     def get_knowledge_article(self, article_id: int) -> Optional[Dict]:
         """Получение статьи по ID"""
         conn = self.get_connection()
