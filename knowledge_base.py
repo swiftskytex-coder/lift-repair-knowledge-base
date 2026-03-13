@@ -30,7 +30,16 @@ def dashboard():
 @app.route('/articles')
 def articles_page():
     """Страница статей"""
-    return render_template('articles.html')
+    return render_template('knowledge_dashboard.html')
+
+
+@app.route('/article/<int:article_id>')
+def article_page(article_id):
+    """Просмотр статьи"""
+    article = kb_db.get_knowledge_article(article_id)
+    if not article:
+        return "Статья не найдена", 404
+    return render_template('article.html', article=article)
 
 
 @app.route('/objects')

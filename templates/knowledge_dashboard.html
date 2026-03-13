@@ -435,7 +435,7 @@
                 let html = '<ul class="article-list">';
                 data.articles.forEach(article => {
                     html += `
-                        <li class="article-item">
+                        <li class="article-item" onclick="window.location.href='/article/${article.id}'" style="cursor:pointer;">
                             <div class="article-title">${article.title}</div>
                             <div class="article-meta">
                                 <span class="badge badge-category">${article.category}</span>
