@@ -7,6 +7,7 @@
 
 import requests
 import sqlite3
+import json
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 from knowledge_db import KnowledgeBaseDB
@@ -305,20 +306,19 @@ class IntegrationManager:
             # Формируем данные для статьи
             article_data = {
                 'category': solution_data.get('category', 'решение'),
-                'title': solution_data.get(
-                    'title',
-                    f"Решение: {ticket.get('problem_description', 'Без описания')[:50]}"
-                ),
+                'title': solution_data.get('title', f"Решение: {ticket.get('problem_description', 'Без описания')[:50]}"),
                 'content': solution_data.get('content', ticket.get('problem_description', '')),
-                'equipment_type': ticket.get('elevator_type'),
-                'manufacturer': ticket.get('manufacturer'),
-                'model': ticket.get('elevator_model'),
-                'symptoms': [ticket.get('problem_description', '')],
-                'solution': solution_data.get('solution_text', ''),
-                'parts_used': list(solution_data.get('parts_used', {}).keys()),
+                'equipment_type': solution_data.get('equipment_type') or ticket.get('elevator_type'),
+                'manufacturer': solution_data.get('manufacturer'),
+                'model': solution_data.get('model'),
+                'serial_number': solution_data.get('serial_number'),
+                'photos': json.dumps(solution_data.get('photos', []), ensure_ascii=False),
+                'symptoms': json.dumps(solution_data.get('symptoms', []), ensure_ascii=False),
+                'solution': solution_data.get('solution', ''),
+                'parts_used': json.dumps(list(solution_data.get('parts_used', {}).keys()), ensure_ascii=False),
                 'difficulty_level': solution_data.get('difficulty_level', 3),
                 'estimated_time': solution_data.get('estimated_time'),
-                'tags': solution_data.get('tags', [])
+                'tags': json.dumps(solution_data.get('tags', []), ensure_ascii=False)
             }
             
             # Создаем статью

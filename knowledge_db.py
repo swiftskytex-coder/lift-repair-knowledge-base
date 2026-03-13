@@ -30,6 +30,8 @@ class KnowledgeBaseDB:
                 equipment_type TEXT,
                 manufacturer TEXT,
                 model TEXT,
+                serial_number TEXT,
+                photos TEXT,  -- JSON массив путей к фото
                 symptoms TEXT,  -- JSON массив
                 solution TEXT,
                 parts_used TEXT,  -- JSON массив артикулов
@@ -152,9 +154,9 @@ class KnowledgeBaseDB:
         
         cursor.execute('''
             INSERT INTO knowledge_articles 
-            (category, title, content, equipment_type, manufacturer, model, symptoms, 
-             solution, parts_used, difficulty_level, estimated_time, tags)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (category, title, content, equipment_type, manufacturer, model, serial_number, photos,
+             symptoms, solution, parts_used, difficulty_level, estimated_time, tags)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             data['category'],
             data['title'],
@@ -162,6 +164,8 @@ class KnowledgeBaseDB:
             data.get('equipment_type'),
             data.get('manufacturer'),
             data.get('model'),
+            data.get('serial_number'),
+            json.dumps(data.get('photos', []), ensure_ascii=False),
             json.dumps(data.get('symptoms', []), ensure_ascii=False),
             data.get('solution'),
             json.dumps(data.get('parts_used', []), ensure_ascii=False),

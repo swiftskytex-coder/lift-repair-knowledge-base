@@ -1,3 +1,8 @@
+# API Keys - не коммитить!
+.env
+.env.local
+.env.*.local
+
 # Python
 __pycache__/
 *.py[cod]
@@ -15,20 +20,23 @@ ENV/
 
 # Logs
 *.log
+logs/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Environment variables
-.env
-.env.local
-
 # Node (if any)
 node_modules/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
